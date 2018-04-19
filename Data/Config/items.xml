@@ -1626,6 +1626,8 @@ Mesh files no longer used:
 		<property name="Block_range" value="4"/>
 		<property name="Sound_start" value="swoosh"/>
 		<property name="Stamina_usage" value="7.52"/>
+		<property name="DamageBonus.stone" value="5"/>
+		<property name="DamageBonus.metal" value="5"/>
 		<property name="DamageBonus.glass" value="1"/>
 		<property name="DamageBonus.head" value="2"/>
 		<property name="DamageBonus.wood" value="0.2"/>
@@ -1639,7 +1641,7 @@ Mesh files no longer used:
 	<property name="Group" value="Tools/Traps"/>
 	<property class="Attributes">
 		<property name="EntityDamage" value="5,15"/>
-		<property name="BlockDamage" value="24,60.5"/>
+		<property name="BlockDamage" value="50,100"/>
 		<property name="DegradationMax" value="200,1000"/>
 		<property name="DegradationRate" value="1,1"/>
 		<property name="DismembermentBaseChance" value="-0.1,0"/>
