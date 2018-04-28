@@ -25,11 +25,20 @@ public class Item {
     @Column(name = "mesh_file_drop")
     @Getter @Setter private String meshFileDrop;
 
-    @ManyToOne
-    @JoinColumn(name = "material", referencedColumnName = "name")
-    @Getter @Setter private Item item;
+    @Column(name = "material")
+    @Getter @Setter private String material;
 
     @Column(name = "weight")
     @Getter @Setter private Double weight;
+
+    @Transient
+    public Item clone() {
+        Item item = new Item();
+        item.setMeshFile(this.meshFile);
+        item.setMeshFileDrop(this.meshFileDrop);
+        item.setMaterial(this.material);
+        item.setWeight(this.weight);
+        return item;
+    }
 
 }

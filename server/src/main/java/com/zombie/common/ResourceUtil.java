@@ -4,6 +4,10 @@ import java.io.InputStream;
 
 public class ResourceUtil {
 
+    public static InputStream getResourceAsStream(String path) {
+        return ResourceUtil.class.getResourceAsStream(path);
+    }
+
     public static byte[] getResource(String path) {
         byte[] arr = null;
         InputStream input = ResourceUtil.class.getResourceAsStream(path);

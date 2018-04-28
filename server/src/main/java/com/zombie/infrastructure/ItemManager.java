@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Collection;
 
 /**
  * Item dao manager
@@ -28,6 +29,22 @@ public class ItemManager {
     @Transactional
     public Item save(Item item) {
         return em.merge(item);
+    }
+
+    @Transactional
+    public void saveAll(Collection<Item> items) {
+        for (Item item : items) {
+            em.merge(item);
+        }
+    }
+
+    /**
+     * Better solution is schema versioning where all entities have relation to some schema version (instead of truncate before data loading)
+     */
+    @Deprecated
+    @Transactional
+    public void truncate() {
+        em.createNativeQuery("truncate table t_item cascade").executeUpdate();
     }
 
 }
