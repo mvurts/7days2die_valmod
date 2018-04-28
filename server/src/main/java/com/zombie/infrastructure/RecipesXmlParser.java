@@ -1,51 +1,42 @@
 package com.zombie.infrastructure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
+import com.zombie.common.DocumentUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class XMLEngine {
+public class RecipesXmlParser {
 
-	private String xmlBody;
+	private InputStream xmlBody;
+	private DocumentUtil documentUtil = new DocumentUtil();
 
-	public XMLEngine(String xmlBody) {
+	public RecipesXmlParser(InputStream xmlBody) {
 		this.xmlBody = xmlBody;
 	}
 
 	public String parse() throws ParserConfigurationException, IOException, SAXException {
 
-		List result                     = new ArrayList();
+		List<Map> result                = new ArrayList();
 		ObjectMapper objectMapper       = new ObjectMapper();
-
-//		File file                       = new File(this.xmlBody);
-		DocumentBuilderFactory factory  = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder         = factory.newDocumentBuilder();
-		byte[] content = xmlBody.getBytes();
-		Document xmlDoc                 = builder.parse(new ByteInputStream(content, content.length));
-
-		xmlDoc.getDocumentElement().normalize();
+		Document xmlDoc                 = documentUtil.getXmlDoc(this.xmlBody);
 
 		NodeList recipes = xmlDoc.getElementsByTagName("recipe");
 
 		for (int i = 0; i < recipes.getLength(); i++) {
 			Map<String, Object> map     = new HashMap<>();
-			List _result                = new ArrayList();
+			List<Map> _result           = new ArrayList();
 			Node node                   = recipes.item(i);
-
-			System.out.println("\n");
 
 			if (node.getNodeType() == Node.ELEMENT_NODE) {
 
@@ -56,9 +47,6 @@ public class XMLEngine {
 				map.put("count", element.getAttribute("count"));
 				map.put("tollArea", element.getAttribute("craft_area"));
 
-				System.out.println("name: " + element.getAttribute("name"));
-				System.out.println("count: " + element.getAttribute("count"));
-				System.out.println("tollArea: " + element.getAttribute("craft_area"));
 				for (int y = 0; y < components.getLength(); y++) {
 					Node _node = components.item(y);
 					if (_node.getNodeType() == Node.ELEMENT_NODE) {
@@ -68,8 +56,6 @@ public class XMLEngine {
 						_map.put("name", _element.getAttribute("name"));
 						_map.put("count", _element.getAttribute("count"));
 						_result.add(_map);
-
-						System.out.println("\t"+_element.getAttribute("name") + " -> " + _element.getAttribute("count"));
 					}
 				}
 
@@ -78,11 +64,7 @@ public class XMLEngine {
 			}
 		}
 
-		String arrayToJson = objectMapper.writeValueAsString(result);
-		System.out.println("JSON result...");
-		System.out.println(arrayToJson);
-
-		return arrayToJson;
+		return objectMapper.writeValueAsString(result);
 	}
 
 }

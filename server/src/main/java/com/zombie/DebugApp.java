@@ -1,7 +1,7 @@
 package com.zombie;
 
 import com.zombie.common.ResourceUtil;
-import com.zombie.infrastructure.XMLEngine;
+import com.zombie.infrastructure.RecipesXmlParser;
 
 /**
  * Created by mvurts on 28.04.2018.
@@ -9,8 +9,8 @@ import com.zombie.infrastructure.XMLEngine;
 public class DebugApp {
 
     public static void main(String[] args) throws Exception {
-        XMLEngine engine = new XMLEngine(ResourceUtil.getResourceAsString("/recipes.xml"));
-        engine.parse();
+        RecipesXmlParser engine = new RecipesXmlParser(ResourceUtil.getResourceAsStream("/recipes.xml"));
+        System.out.println(engine.parse());
     }
 
 }
