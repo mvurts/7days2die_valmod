@@ -1,0 +1,83 @@
+buildscript {
+    repositories {
+        maven {
+            url("https://plugins.gradle.org/m2/")
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.5.8.RELEASE")
+    }
+}
+
+plugins {
+    id 'io.franzbecker.gradle-lombok' version '1.10'
+    id "org.flywaydb.flyway" version "4.1.2"
+}
+
+apply plugin: 'java'
+//apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'application'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.franzbecker.gradle-lombok'
+
+jar {
+    baseName = 'zombie'
+    version = '1.0.0'
+}
+
+repositories {
+    maven {
+        url("https://plugins.gradle.org/m2/")
+    }
+}
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+group 'com.zombie.sdtd'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.springframework.boot:spring-boot-starter-web'
+    compile 'org.springframework.boot:spring-boot-starter-cache'
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'javax.cache:cache-api'
+    compile group: 'org.postgresql', name: 'postgresql', version: '42.1.4'
+//    compile 'com.fasterxml.jackson.core:jackson-databind'
+    compile group: 'org.ehcache', name: 'jcache', version: '1.0.1'
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+}
+
+
+compileJava.options.encoding = 'UTF-8'
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+
+if (!project.hasProperty("flywayUrl")) {
+    ext.flywayUrl="jdbc:postgresql://localhost:5432/zombie"
+}
+
+flyway {
+    driver = "org.postgresql.Driver"
+    url = "$flywayUrl"
+    user = "zombie"
+    password = "zombie"
+    locations = ['filesystem:db/migration']
+}
+
+mainClassName = "com.center2m.si.Application"
+applicationDefaultJvmArgs = [ project.hasProperty("xmx") ? "-Xmx".concat(ext.xmx) : "-Xmx2048m",
+                              "-Dspring.config.location=../etc/application.properties",
+                              "-Dlogging.file=../log/zombie.log",
+                              "-Djdbc.connection=" + (project.hasProperty("jdbcConnection") ? ext.jdbcConnection : "jdbc:postgresql://localhost:5432/zombie"),
+                              "-Dddl.auto=".concat(project.hasProperty("ddlAuto") ? ext.ddlAuto : "validate"),
+]
+
