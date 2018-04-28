@@ -1,14 +1,11 @@
 package com.zombie.infrastructure;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -30,7 +27,8 @@ public class XMLEngine {
 
 	public String parse() throws ParserConfigurationException, IOException, SAXException {
 
-		List result = new ArrayList();
+		List result                     = new ArrayList();
+		ObjectMapper objectMapper       = new ObjectMapper();
 
 		File file                       = new File(this.xml);
 		DocumentBuilderFactory factory  = DocumentBuilderFactory.newInstance();
@@ -79,11 +77,11 @@ public class XMLEngine {
 			}
 		}
 
-		String jsonText = JSONValue.toJSONString(result);
+		String arrayToJson = objectMapper.writeValueAsString(result);
 		System.out.println("JSON result...");
-		System.out.println(jsonText);
+		System.out.println(arrayToJson);
 
-		return jsonText;
+		return arrayToJson;
 	}
 
 }
