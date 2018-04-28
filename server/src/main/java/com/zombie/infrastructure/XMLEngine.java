@@ -1,6 +1,7 @@
 package com.zombie.infrastructure;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sun.xml.internal.messaging.saaj.util.ByteInputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -10,7 +11,6 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,10 +19,10 @@ import java.util.Map;
 
 public class XMLEngine {
 
-	String xml;
+	private String xmlBody;
 
-	XMLEngine(String xml) {
-		this.xml = xml;
+	public XMLEngine(String xmlBody) {
+		this.xmlBody = xmlBody;
 	}
 
 	public String parse() throws ParserConfigurationException, IOException, SAXException {
@@ -30,10 +30,11 @@ public class XMLEngine {
 		List result                     = new ArrayList();
 		ObjectMapper objectMapper       = new ObjectMapper();
 
-		File file                       = new File(this.xml);
+//		File file                       = new File(this.xmlBody);
 		DocumentBuilderFactory factory  = DocumentBuilderFactory.newInstance();
 		DocumentBuilder builder         = factory.newDocumentBuilder();
-		Document xmlDoc                 = builder.parse(file);
+		byte[] content = xmlBody.getBytes();
+		Document xmlDoc                 = builder.parse(new ByteInputStream(content, content.length));
 
 		xmlDoc.getDocumentElement().normalize();
 
