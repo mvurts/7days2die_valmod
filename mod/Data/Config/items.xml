@@ -2088,6 +2088,9 @@ Mesh files no longer used:
 		<property name="DamageBonus.wood" value="0.25"/>
 		<property name="DamageBonus.head" value="3"/>
 		<property name="DamageBonus.glass" value="1"/>
+		<property name="DamageBonus.stone" value="7"/>
+		<property name="DamageBonus.earth" value="7"/>
+		<property name="DamageBonus.metal" value="7"/>
 		<property name="SupportHarvesting" value="true"/>
 		<property name="UseMeleeCrosshair" value="true"/>
 		<property name="ToolCategory.harvestingTools" value="2" param1="1"/>
